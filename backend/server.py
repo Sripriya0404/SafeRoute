@@ -7,6 +7,7 @@ import os
 import logging
 from pathlib import Path
 from routers.safety import router as safety_router
+from routers.auth import router as auth_router
 
 
 ROOT_DIR = Path(__file__).parent
@@ -37,9 +38,7 @@ async def root():
     return {"message": "SafeRoute API online", "service": "campus-safety"}
 
 api_router.include_router(safety_router)
-
-# Include the router in the main app
-app.include_router(api_router)
+api_router.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -55,3 +54,6 @@ logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 logger = logging.getLogger(__name__)
+
+# Keep router inclusion last so every folded route is served under /api.
+app.include_router(api_router)

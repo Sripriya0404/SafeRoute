@@ -1,0 +1,115 @@
+{
+  "iteration": 5,
+  "passed": 11,
+  "failed": 1,
+  "bugs": [
+    {
+      "severity": "medium",
+      "criterion": "Student hazard report is tracked in report history",
+      "description": "Submitting a hazard via the dialog closes the dialog and renders the new report in Recent campus reports, but the authenticated student's 'Your reports' profile stat on the dashboard does not update until a full page reload. The frontend hazardMutation's onSuccess handler (frontend/src/pages/Home.tsx ~line 184) invalidates 'safety-hazards' and 'safety-dashboard' react-query caches but never invalidates 'student-overview', so the overview stat stays stale.",
+      "evidence": "Browser check saferoute-hazard-report-increments-count failed twice (reproducible, not flaky): after submitting a unique hazard report the 'Your reports' stat remained at its pre-submission value (e.g. stayed '3' instead of becoming '4', and on rerun stayed '6' instead of '7'). Cross-check via curl confirmed the backend DID persist and increment correctly: GET /api/auth/overview report_count went 4 -> 5 immediately after POST /api/safety/hazards with the session cookie, proving this is a frontend cache-invalidation bug, not a backend/data issue."
+    }
+  ],
+  "action_items": [],
+  "retest_needed": true,
+  "checks": [
+    {
+      "criterion": "Anurag University student login works with the demo account",
+      "name": "saferoute-login-opens-dashboard",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Login with student@anurag.edu.in / SafeRoute@2026 opened the dashboard showing 'Aarav Reddy' and the Anurag University map title."
+    },
+    {
+      "criterion": "Light and dark themes both work",
+      "name": "saferoute-theme-toggle-light-dark",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Fresh page loaded without the 'dark' html class (light mode); after login and theme toggle click the html gained the 'dark' class with session/content still showing 'Aarav Reddy'; toggling back removed the class."
+    },
+    {
+      "criterion": "University imagery and branding are visible",
+      "name": "saferoute-login-branding-visible",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "university-campus-image loaded (naturalWidth > 10), 'Venkatapur, Hyderabad' chip and 'Anurag University · Hyderabad' text were visible on the login screen; dashboard map-title asserted 'Anurag University' in the login-opens-dashboard check."
+    },
+    {
+      "criterion": "Student can calculate and save a safe route",
+      "name": "saferoute-calculate-and-save-route",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Planning Central Library -> University Hostels rendered route-option cards; clicking Save route increased the 'Saved routes' profile stat by 1."
+    },
+    {
+      "criterion": "Student can start walk mode and record a safe arrival",
+      "name": "saferoute-walk-mode-records-arrival",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Start navigation showed the active-escort-mode-hud; Record safe arrival closed the HUD and incremented the 'Safe arrivals' profile stat by 1."
+    },
+    {
+      "criterion": "Student hazard report is tracked in report history",
+      "name": "saferoute-hazard-report-increments-count",
+      "lane": "browser",
+      "status": "failed",
+      "evidence": "New hazard appeared in Recent campus reports and the dialog closed, but the 'Your reports' stat did not increment on screen (stayed at pre-submit value across two separate runs: 3 not 4, then 6 not 7). See bugs[0]."
+    },
+    {
+      "criterion": "Emergency dispatch and contacts remain usable",
+      "name": "saferoute-dispatches-emergency",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Quick SOS flow showed the 'Campus dispatch notified' success toast and closed the modal; emergency-contacts-panel, campus-police-call and night-escort-call remained visible/readable."
+    },
+    {
+      "criterion": "Session and logout are safe",
+      "name": "saferoute-session-persists-and-logout-redirects",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Page reload after login kept the dashboard showing 'Aarav Reddy' (cookie session preserved); Sign out returned to the login page; navigating to '/' while unauthenticated redirected back to the login page."
+    },
+    {
+      "criterion": "Anurag University student login works with the demo account (API)",
+      "name": "test_tscheck_student_login_and_profile.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/auth/login with demo credentials returned 200 with student.name == 'Aarav Reddy' and a saferoute_session cookie; wrong password returned 401; POST /api/auth/saved-routes and POST /api/auth/arrivals each incremented the respective GET /api/auth/overview counts by 1; POST /api/safety/hazards (authenticated) incremented overview.report_count by 1."
+    },
+    {
+      "criterion": "Route planning API returns safe route options and rejects same locations",
+      "name": "test_tscheck_route_planning.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/routes/plan returned 200 with 3 options and recommended_id 'illuminated'; same origin/destination returned 422."
+    },
+    {
+      "criterion": "Student hazard report is tracked in report history (API)",
+      "name": "test_tscheck_hazard_reporting.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/hazards returned 200 with location_name 'Administration Block' for arts-center, and GET /api/safety/hazards listed the created id."
+    },
+    {
+      "criterion": "Emergency dispatch and contacts remain usable (API)",
+      "name": "test_tscheck_emergency_dispatch.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/emergency for west-gate returned 200 with status 'Dispatched', location_name 'Main Gate', eta_minutes 3."
+    },
+    {
+      "criterion": "Dashboard API provides campus status, metrics, and recent hazards",
+      "name": "test_tscheck_dashboard_metrics.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "GET /api/safety/dashboard returned 200 with campus_status 'ALL CLEAR', >=4 metrics, and >=3 recent_hazards with required fields."
+    },
+    {
+      "criterion": "University imagery and branding are visible (API locations)",
+      "name": "test_tscheck_campus_locations.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "GET /api/safety/locations returned all 8 Anurag University landmark names (Central Library, Pharmacy Block, Student Activity Centre, University Hostels, Engineering Block, Sports Complex, Main Gate, Administration Block)."
+    }
+  ]
+}

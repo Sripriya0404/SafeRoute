@@ -23,6 +23,7 @@ export interface Hazard {
   location_name: string;
   description: string;
   status: "Open" | "Investigating" | "Resolved";
+  reporter_id?: string | null;
   reported_at: string;
 }
 
@@ -74,4 +75,36 @@ export interface EmergencyResponse {
   message: string;
   eta_minutes: number;
   created_at: string;
+}
+
+export interface Student {
+  id: string;
+  name: string;
+  email: string;
+  student_id: string;
+  department: string;
+  year: string;
+  created_at: string;
+}
+
+export interface AuthResponse { student: Student }
+
+export interface SavedRoute {
+  id: string;
+  student_id: string;
+  origin_id: string;
+  origin_name: string;
+  destination_id: string;
+  destination_name: string;
+  route_name: string;
+  minutes: number;
+  safety_score: number;
+  saved_at: string;
+}
+
+export interface StudentOverview {
+  student: Student;
+  saved_routes: SavedRoute[];
+  report_count: number;
+  safe_arrivals: number;
 }

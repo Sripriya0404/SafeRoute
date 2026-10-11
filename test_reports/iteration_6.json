@@ -1,0 +1,109 @@
+{
+  "iteration": 6,
+  "passed": 14,
+  "failed": 0,
+  "bugs": [],
+  "action_items": [],
+  "retest_needed": false,
+  "checks": [
+    {
+      "criterion": "Anurag University student login works with the demo account",
+      "name": "saferoute-login-opens-dashboard",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: login with student@anurag.edu.in / SafeRoute@2026 opened the dashboard showing 'Aarav Reddy' and Anurag University map title."
+    },
+    {
+      "criterion": "Anurag University student login works with the demo account (public preview URL)",
+      "name": "saferoute-login-opens-dashboard-public",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Ran against https://safepath-campus.preview.emergentagent.com: login succeeded, heading 'Aarav Reddy' and 'Anurag University' text visible via the public ingress path."
+    },
+    {
+      "criterion": "Light and dark themes both work",
+      "name": "saferoute-theme-toggle-light-dark",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: fresh load is light mode; toggling added/removed the 'dark' html class while session content stayed visible."
+    },
+    {
+      "criterion": "University imagery and branding are visible",
+      "name": "saferoute-login-branding-visible",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: campus image loaded (naturalWidth > 10), 'Venkatapur, Hyderabad' and 'Anurag University · Hyderabad' visible on login screen."
+    },
+    {
+      "criterion": "Student can calculate and save a safe route",
+      "name": "saferoute-calculate-and-save-route",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: Central Library -> University Hostels rendered route options; Save route incremented 'Saved routes' stat by 1."
+    },
+    {
+      "criterion": "Student can start walk mode and record a safe arrival",
+      "name": "saferoute-walk-mode-records-arrival",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: Start navigation showed escort HUD; Record safe arrival incremented 'Safe arrivals' stat by 1."
+    },
+    {
+      "criterion": "Student hazard report is tracked in report history",
+      "name": "saferoute-hazard-report-increments-count",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Previously-failing check now PASSES: submitting a hazard closes the dialog, renders the new report, and increments the 'Your reports' stat by 1 without a page reload. Confirms the student-overview cache-invalidation fix from the briefing resolved iteration_5 bug."
+    },
+    {
+      "criterion": "Emergency dispatch and contacts remain usable",
+      "name": "saferoute-dispatches-emergency",
+      "lane": "browser",
+      "status": "passed",
+      "evidence": "Re-run: Quick SOS showed 'Campus dispatch notified' success toast; emergency-contacts-panel, campus-police-call and night-escort-call remained visible."
+    },
+    {
+      "criterion": "Session and logout are safe",
+      "name": "saferoute-session-persists-and-logout-redirects",
+      "lane": "browser",
+      "status": "flaky",
+      "evidence": "First re-run failed on a transient 502/429 burst from the dev server (12 consecutive 429s) while asserting the post-logout login page; immediate rerun passed cleanly (refresh preserved session, Sign out returned to login, unauthenticated '/' redirected to login). Classified flaky, not a bug - no app-level evidence of failure."
+    },
+    {
+      "criterion": "Anurag University student login works with the demo account (API)",
+      "name": "test_tscheck_student_login_and_profile.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "pytest suite re-run: 10 passed in 1.24s. POST /api/auth/login with demo credentials returns 200 with student.name 'Aarav Reddy'; wrong password 401; saved-routes/arrivals/hazards increment overview counts."
+    },
+    {
+      "criterion": "Route planning API returns safe route options and rejects same locations",
+      "name": "test_tscheck_route_planning.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/routes/plan returns 200 with 3 options and recommended_id 'illuminated'; same origin/destination returns 422."
+    },
+    {
+      "criterion": "Student hazard report is tracked in report history (API)",
+      "name": "test_tscheck_hazard_reporting.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/hazards returns 200 for arts-center; GET /api/safety/hazards lists the created id."
+    },
+    {
+      "criterion": "Emergency dispatch and contacts remain usable (API)",
+      "name": "test_tscheck_emergency_dispatch.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "POST /api/safety/emergency for west-gate returns 200 with status 'Dispatched', eta_minutes 3."
+    },
+    {
+      "criterion": "Dashboard API provides campus status, metrics, and recent hazards",
+      "name": "test_tscheck_dashboard_metrics.py",
+      "lane": "backend",
+      "status": "passed",
+      "evidence": "GET /api/safety/dashboard returns 200 with campus_status 'ALL CLEAR', >=4 metrics, >=3 recent_hazards."
+    }
+  ],
+  "notes": "Retest of iteration_5. The sole prior bug (stale 'Your reports' dashboard stat after hazard submission due to missing student-overview cache invalidation) is confirmed FIXED per the saferoute-hazard-report-increments-count check now passing. Added one new browser check (saferoute-login-opens-dashboard-public) exercising the public preview ingress URL as required. One transient flaky result (session/logout check hit dev-server 502/429s on first attempt, passed clean on immediate rerun) - not classified as a bug. Campus map/photo and emergency dispatch remain acknowledged spec deviations (SVG demo map, Unsplash illustrative photo, mocked dispatch persistence) and were exercised as working demo flows, consistent with the briefing."
+}

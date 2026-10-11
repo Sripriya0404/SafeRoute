@@ -7,6 +7,6 @@ def test_emergency_dispatch_returns_dispatch_confirmation(client):
     assert response.status_code == 200, response.text
     body = response.json()
     assert body['status'] == 'Dispatched'
-    assert body['location_name'] == 'West Gate'
+    assert body['location_name'] == 'Main Gate'
     assert body['message'] == message
     assert body['eta_minutes'] == 3

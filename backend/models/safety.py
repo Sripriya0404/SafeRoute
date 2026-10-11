@@ -39,6 +39,7 @@ class Hazard(BaseModel):
     location_name: str
     description: str
     status: Literal["Open", "Investigating", "Resolved"] = "Open"
+    reporter_id: str | None = None
     reported_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 

@@ -21,6 +21,10 @@ INDEXES: dict[str, list[IndexModel]] = {
     "status_checks": [IndexModel([("timestamp", DESCENDING)], name="timestamp_desc")],
     "hazards": [IndexModel([("reported_at", DESCENDING)], name="reported_at_desc")],
     "emergency_events": [IndexModel([("created_at", DESCENDING)], name="created_at_desc")],
+    "students": [IndexModel([("email", ASCENDING)], name="email_unique", unique=True), IndexModel([("student_id", ASCENDING)], name="student_id_unique", unique=True)],
+    "sessions": [IndexModel([("token", ASCENDING)], name="token_unique", unique=True), IndexModel([("expires_at", ASCENDING)], name="expires_at_ttl", expireAfterSeconds=0)],
+    "saved_routes": [IndexModel([("student_id", ASCENDING), ("saved_at", DESCENDING)], name="student_saved_at")],
+    "arrivals": [IndexModel([("student_id", ASCENDING), ("arrived_at", DESCENDING)], name="student_arrived_at")],
 }
 
 

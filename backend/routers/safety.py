@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Cookie, HTTPException
 
 from lib.db import db
 from models.safety import (
@@ -15,24 +15,25 @@ from models.safety import (
     RouteRequest,
     SafetyMetric,
 )
+from routers.auth import require_student
 
 router = APIRouter(prefix="/safety", tags=["safety"])
 
 LOCATIONS = [
-    CampusLocation(id="library", name="Main Library", short_code="LIB", kind="Study hub", x=22, y=32, description="24/7 study access and staffed help desk"),
-    CampusLocation(id="science-quad", name="Science Quad", short_code="SCI", kind="Academic", x=43, y=24, description="North academic corridor"),
-    CampusLocation(id="student-union", name="Student Union", short_code="SU", kind="Community", x=59, y=43, description="Food court, student services, and events"),
-    CampusLocation(id="north-dorms", name="North Dorms", short_code="ND", kind="Residence", x=78, y=20, description="Residence halls and late-night shuttle stop"),
-    CampusLocation(id="engineering", name="Engineering Hall", short_code="ENG", kind="Academic", x=35, y=59, description="Labs and maker spaces"),
-    CampusLocation(id="athletics", name="South Athletics", short_code="ATH", kind="Recreation", x=66, y=73, description="Recreation center and south field"),
-    CampusLocation(id="west-gate", name="West Gate", short_code="WG", kind="Entry", x=12, y=72, description="Main pedestrian entrance"),
-    CampusLocation(id="arts-center", name="Arts Center", short_code="ART", kind="Arts", x=84, y=58, description="Theater, studios, and gallery"),
+    CampusLocation(id="library", name="Central Library", short_code="LIB", kind="Study hub", x=22, y=32, description="Anurag University learning and resource centre"),
+    CampusLocation(id="science-quad", name="Pharmacy Block", short_code="PHR", kind="Academic", x=43, y=24, description="School of Pharmacy academic wing"),
+    CampusLocation(id="student-union", name="Student Activity Centre", short_code="SAC", kind="Community", x=59, y=43, description="Student clubs, dining, and events"),
+    CampusLocation(id="north-dorms", name="University Hostels", short_code="HST", kind="Residence", x=78, y=20, description="Student residence and evening shuttle point"),
+    CampusLocation(id="engineering", name="Engineering Block", short_code="ENG", kind="Academic", x=35, y=59, description="Engineering classrooms, labs, and innovation spaces"),
+    CampusLocation(id="athletics", name="Sports Complex", short_code="SPT", kind="Recreation", x=66, y=73, description="Outdoor courts and student recreation"),
+    CampusLocation(id="west-gate", name="Main Gate", short_code="GATE", kind="Entry", x=12, y=72, description="Primary campus entrance at Venkatapur"),
+    CampusLocation(id="arts-center", name="Administration Block", short_code="ADM", kind="Administration", x=84, y=58, description="University administration and student support"),
 ]
 
 FALLBACK_HAZARDS = [
-    Hazard(id="hazard-lighting-01", category="Poor lighting", severity="Medium", location_id="engineering", location_name="Engineering Hall", description="Path lighting is dim between the east doors and service road.", status="Investigating", reported_at=datetime(2026, 2, 18, 21, 10, tzinfo=timezone.utc)),
-    Hazard(id="hazard-construction-01", category="Construction", severity="Low", location_id="student-union", location_name="Student Union", description="Temporary fencing narrows the north walkway.", status="Open", reported_at=datetime(2026, 2, 18, 18, 42, tzinfo=timezone.utc)),
-    Hazard(id="hazard-blue-light-01", category="Broken blue light", severity="High", location_id="north-dorms", location_name="North Dorms", description="Blue light tower BL-04 is awaiting a replacement part.", status="Open", reported_at=datetime(2026, 2, 17, 23, 6, tzinfo=timezone.utc)),
+    Hazard(id="hazard-lighting-01", category="Poor lighting", severity="Medium", location_id="engineering", location_name="Engineering Block", description="Path lighting is dim beside the east laboratory walkway.", status="Investigating", reported_at=datetime(2026, 2, 18, 21, 10, tzinfo=timezone.utc)),
+    Hazard(id="hazard-construction-01", category="Construction", severity="Low", location_id="student-union", location_name="Student Activity Centre", description="Temporary maintenance barriers narrow the north walkway.", status="Open", reported_at=datetime(2026, 2, 18, 18, 42, tzinfo=timezone.utc)),
+    Hazard(id="hazard-blue-light-01", category="Broken blue light", severity="High", location_id="north-dorms", location_name="University Hostels", description="Emergency assistance point BL-04 is awaiting service.", status="Open", reported_at=datetime(2026, 2, 17, 23, 6, tzinfo=timezone.utc)),
 ]
 
 
@@ -61,9 +62,12 @@ async def get_hazards() -> list[Hazard]:
 
 
 @router.post("/hazards", response_model=Hazard)
-async def create_hazard(payload: HazardCreate) -> Hazard:
+async def create_hazard(payload: HazardCreate, saferoute_session: str | None = Cookie(default=None)) -> Hazard:
     location = find_location(payload.location_id)
-    hazard = Hazard(**payload.model_dump(), location_name=location.name)
+    reporter_id = None
+    if saferoute_session:
+        reporter_id = (await require_student(saferoute_session)).id
+    hazard = Hazard(**payload.model_dump(), location_name=location.name, reporter_id=reporter_id)
     await db.hazards.insert_one(hazard.model_dump())
     return hazard
 
