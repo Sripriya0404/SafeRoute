@@ -1,0 +1,30 @@
+{
+  "iteration": 1,
+  "passed": 11,
+  "failed": 1,
+  "bugs": [
+    {
+      "severity": "medium",
+      "title": "Emergency dispatch confirmation is not rendered in the UI",
+      "evidence": "Browser check saferoute-dispatches-emergency failed twice: modal closed, but getByText('Campus dispatch notified') was absent in the failure screenshot. Backend cross-check POST /api/safety/emergency returned 200 with {\"status\":\"Dispatched\",\"location_name\":\"West Gate\",\"eta_minutes\":3}. The frontend imports sonner toast calls but main.tsx does not mount a Toaster."
+    }
+  ],
+  "action_items": [
+    "Mount the Sonner Toaster (or provide an equivalent visible confirmation) in the application shell so successful emergency dispatch visibly confirms campus dispatch was notified."
+  ],
+  "retest_needed": true,
+  "checks": [
+    {"criterion":"The SafeRoute command center loads with campus status, navigation, map, route planner, metrics, hazard reports, and emergency contacts","name":"saferoute-dashboard-loads","lane":"browser","status":"passed","evidence":"Public preview loaded; header, ALL CLEAR campus status, map, planner, hazards panel, and emergency contacts were visible."},
+    {"criterion":"A student can calculate a safer route","name":"saferoute-calculates-route","lane":"browser","status":"passed","evidence":"POST route flow rendered three route cards including 98% safety score, 620m, 8 min, and Recommended."},
+    {"criterion":"A student can start and complete walk mode","name":"saferoute-walk-mode-completes","lane":"browser","status":"passed","evidence":"Start navigation displayed active escort HUD with North Dorms and 8 min remaining; I arrived safely removed the HUD."},
+    {"criterion":"A student can report a campus hazard","name":"saferoute-reports-campus-hazard","lane":"browser","status":"passed","evidence":"Unique tscheck hazard submission closed the dialog and the new description appeared in recent campus reports."},
+    {"criterion":"Emergency dispatch flow works","name":"saferoute-dispatches-emergency","lane":"browser","status":"failed","evidence":"Emergency modal closed after dispatch, but visible Campus dispatch notified confirmation was absent on two runs; backend POST returned 200 Dispatched."},
+    {"criterion":"Dashboard metrics and hazard data are usable","name":"saferoute-metrics-and-hazards-visible","lane":"browser","status":"passed","evidence":"Metrics showed 89%, 06 units, and 04 min; recent report rows showed severity, description, Engineering Hall location, and report time."},
+    {"criterion":"Responsive desktop presentation is usable","name":"saferoute-desktop-layout-usable","lane":"browser","status":"passed","evidence":"At 1280px, map and planner were visible side by side with measured map width above 500px and planner width above 300px."},
+    {"criterion":"Route planning API returns safe route options and rejects same locations","name":"test_tscheck_route_planning.py","lane":"backend","status":"passed","evidence":"pytest passed: POST /api/safety/routes/plan returned 200 with 3 options and recommended illuminated; same-location validation returned 422."},
+    {"criterion":"Hazard reporting API persists and returns a newly created hazard","name":"test_tscheck_hazard_reporting.py","lane":"backend","status":"passed","evidence":"pytest passed: POST /api/safety/hazards returned 200 with created id/location_name and GET returned that id."},
+    {"criterion":"Emergency dispatch API confirms dispatch","name":"test_tscheck_emergency_dispatch.py","lane":"backend","status":"passed","evidence":"pytest passed: POST /api/safety/emergency returned 200 Dispatched for West Gate with ETA 3."},
+    {"criterion":"Dashboard API provides campus status, metrics, and recent hazards","name":"test_tscheck_dashboard_metrics.py","lane":"backend","status":"passed","evidence":"pytest passed: GET /api/safety/dashboard returned 200, 4 metrics, and at least 3 hazard rows with severity/location/description/time."},
+    {"criterion":"Campus locations API exposes fictional landmarks","name":"test_tscheck_campus_locations.py","lane":"backend","status":"passed","evidence":"pytest passed: GET /api/safety/locations returned 200 and all 8 specified campus landmarks."}
+  ]
+}

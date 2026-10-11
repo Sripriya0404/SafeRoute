@@ -1,0 +1,31 @@
+{
+  "iteration": 2,
+  "passed": 11,
+  "failed": 1,
+  "bugs": [
+    {
+      "severity": "medium",
+      "title": "Recent hazard panel omits seeded Engineering Hall hazard",
+      "evidence": "Browser check saferoute-metrics-and-hazards-visible failed twice after rerun: recent-hazards-panel rendered only the newest five Arts Center rows and did not contain Engineering Hall or the seeded description. Backend cross-check GET /api/safety/dashboard returned 200 with metrics and recent_hazards, but its newest five rows were also all Arts Center tscheck fixtures, so the UI/API are consistent; the criterion's seeded-row assertion is not stable after accumulated test data."
+    }
+  ],
+  "action_items": [
+    "Review dashboard recent-hazard ordering/fixture isolation: the check's seeded Engineering Hall expectation is displaced by newer tscheck rows after prior runs. Prefer asserting on a hazard created by the check or ensure seeded/demo rows remain visible.",
+    "The initial emergency confirmation issue is resolved: saferoute-dispatches-emergency passed on retest and backend dispatch tests pass."
+  ],
+  "retest_needed": true,
+  "checks": [
+    {"criterion":"The SafeRoute command center loads with campus status, navigation, map, route planner, metrics, hazard reports, and emergency contacts","name":"saferoute-dashboard-loads","lane":"browser","status":"passed","evidence":"Public preview dashboard loaded with header, ALL CLEAR status, map, planner, hazard panel, and emergency contacts."},
+    {"criterion":"A student can calculate a safer route","name":"saferoute-calculates-route","lane":"browser","status":"passed","evidence":"Route flow rendered route option cards with 98% safety score, 620m, 8 min, and Recommended."},
+    {"criterion":"A student can start and complete walk mode","name":"saferoute-walk-mode-completes","lane":"browser","status":"passed","evidence":"Active escort HUD showed destination and remaining time; I arrived safely completed the flow."},
+    {"criterion":"A student can report a campus hazard","name":"saferoute-reports-campus-hazard","lane":"browser","status":"passed","evidence":"Unique hazard submission closed the dialog and displayed the new report in recent campus reports."},
+    {"criterion":"Emergency dispatch flow works","name":"saferoute-dispatches-emergency","lane":"browser","status":"passed","evidence":"Emergency modal dispatch completed and visible Campus dispatch notified confirmation appeared on retest."},
+    {"criterion":"Dashboard metrics and hazard data are usable","name":"saferoute-metrics-and-hazards-visible","lane":"browser","status":"failed","evidence":"Failed twice; metrics were visible, but recent-hazards-panel omitted Engineering Hall and the seeded description, showing newer Arts Center tscheck rows instead. GET /api/safety/dashboard returned 200 and the same newest-five data."},
+    {"criterion":"Responsive desktop presentation is usable","name":"saferoute-desktop-layout-usable","lane":"browser","status":"passed","evidence":"At desktop width, map and planner remained side by side with readable controls and no clipping."},
+    {"criterion":"Route planning API returns safe route options and rejects same locations","name":"test_tscheck_route_planning.py","lane":"backend","status":"passed","evidence":"Serial pytest passed: 200 route response with 3 options and 422 for same locations."},
+    {"criterion":"Hazard reporting API persists and returns a newly created hazard","name":"test_tscheck_hazard_reporting.py","lane":"backend","status":"passed","evidence":"Serial pytest passed: created hazard returned an id/location and was retrievable by GET."},
+    {"criterion":"Emergency dispatch API confirms dispatch","name":"test_tscheck_emergency_dispatch.py","lane":"backend","status":"passed","evidence":"Serial pytest passed: POST /api/safety/emergency returned 200 Dispatched with ETA."},
+    {"criterion":"Dashboard API provides campus status, metrics, and recent hazards","name":"test_tscheck_dashboard_metrics.py","lane":"backend","status":"passed","evidence":"Serial pytest passed: dashboard returned 200, four metrics, and recent hazard fields."},
+    {"criterion":"Campus locations API exposes fictional landmarks","name":"test_tscheck_campus_locations.py","lane":"backend","status":"passed","evidence":"Serial pytest passed: locations endpoint returned all eight specified fictional campus landmarks."}
+  ]
+}

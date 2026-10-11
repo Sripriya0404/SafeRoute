@@ -1,0 +1,183 @@
+{
+  "project_name": "SafeRoute - Campus Safety & Route Assistance",
+  "archetype": "ARCHETYPE 2: THE PERFORMANCE PRO & TACTICAL SAFETY COMMAND CENTER",
+  "theme": "Dark Mode Default (Tactical Night Safety & High Contrast UI with Light Mode Toggle Support)",
+  "design_principles": [
+    "Fusion over Imitation: Combine high-precision tactical aviation HUD controls with warm human-centric campus wayfinding.",
+    "Emotion First: Instill calm, trust, and absolute situational awareness during late-night campus navigation.",
+    "Tactical Hierarchy: Information is prioritized by threat urgency and navigation clarity; no cognitive overload in emergency flows.",
+    "Negative Space & Optical Density: Dense micro-data panels paired with expansive, high-contrast vector map canvas.",
+    "Contrast over Saturation: Pure obsidian dark surfaces tint-blended with slate, accented by vivid signal colors (Beacon Cyan, Safe Emerald, Warning Amber, Alert Crimson)."
+  ],
+  "typography": {
+    "heading_font": "Outfit, sans-serif",
+    "body_font": "Plus Jakarta Sans, sans-serif",
+    "mono_font": "JetBrains Mono, monospace",
+    "google_fonts_import": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap",
+    "hierarchy": {
+      "h1_hero": "text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none",
+      "h2_section": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight",
+      "h3_card": "text-lg sm:text-xl font-semibold tracking-normal",
+      "subtitle": "text-base sm:text-lg font-medium text-slate-400 leading-relaxed",
+      "body": "text-sm sm:text-base font-normal leading-normal text-slate-300",
+      "caption_mono": "font-mono text-xs tracking-wider uppercase text-slate-400",
+      "badge": "font-mono text-[11px] font-semibold tracking-wider uppercase px-2.5 py-1 rounded-full"
+    }
+  },
+  "colors": {
+    "background_base": "#0B0F17",
+    "background_surface": "#111827",
+    "background_card": "#1E293B",
+    "background_glass": "rgba(15, 23, 42, 0.75)",
+    "border_subtle": "rgba(255, 255, 255, 0.08)",
+    "border_active": "rgba(6, 182, 212, 0.4)",
+    "brand_primary": {
+      "hex": "#06B6D4",
+      "name": "Beacon Cyan",
+      "usage": "Primary navigation CTA, route highlights, active status rings"
+    },
+    "brand_secondary": {
+      "hex": "#10B981",
+      "name": "Safe Emerald",
+      "usage": "Illuminated safe paths, high lighting ratings, active patrol confirmations"
+    },
+    "warning_accent": {
+      "hex": "#F59E0B",
+      "name": "Signal Amber",
+      "usage": "Moderate hazards, low lighting warnings, construction detours"
+    },
+    "danger_accent": {
+      "hex": "#EF4444",
+      "name": "Alert Crimson",
+      "usage": "Emergency SOS button, high severity incidents, live police alert triggers"
+    },
+    "text_colors": {
+      "primary": "#F8FAFC",
+      "secondary": "#94A3B8",
+      "muted": "#64748B",
+      "inverse": "#090D16"
+    }
+  },
+  "layout_and_bento_grid": {
+    "header_nav": "Sticky glassmorphism navigation header (height 64px, backdrop-blur-md, bg-[#0B0F17]/80, border-b border-white/10, z-50)",
+    "main_container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8",
+    "bento_dashboard_grid": "grid grid-cols-1 md:grid-cols-8 lg:grid-cols-12 gap-4 lg:gap-6",
+    "bento_spans": {
+      "map_hero_panel": "col-span-full lg:col-span-8 min-h-[540px] rounded-2xl border border-white/10 overflow-hidden relative shadow-2xl bg-slate-900/90",
+      "route_planner_sidebar": "col-span-full lg:col-span-4 flex flex-col space-y-4",
+      "metrics_row_1": "col-span-full md:col-span-4 lg:col-span-3 rounded-xl border border-white/10 p-5 bg-slate-900/60 backdrop-blur-sm",
+      "metrics_row_2": "col-span-full md:col-span-4 lg:col-span-3 rounded-xl border border-white/10 p-5 bg-slate-900/60 backdrop-blur-sm",
+      "metrics_row_3": "col-span-full md:col-span-4 lg:col-span-3 rounded-xl border border-white/10 p-5 bg-slate-900/60 backdrop-blur-sm",
+      "metrics_row_4": "col-span-full md:col-span-4 lg:col-span-3 rounded-xl border border-white/10 p-5 bg-slate-900/60 backdrop-blur-sm",
+      "recent_hazards_list": "col-span-full lg:col-span-7 rounded-2xl border border-white/10 p-6 bg-slate-900/70",
+      "emergency_contacts_widget": "col-span-full lg:col-span-5 rounded-2xl border border-red-500/20 p-6 bg-gradient-to-br from-red-950/30 via-slate-900/80 to-slate-900/90"
+    }
+  },
+  "map_visualization_approach": {
+    "technique": "Interactive Custom Vector Canvas / SVG Campus Map with layer toggles & real-time route path renderers",
+    "campus_demographics": "Fictional University Campus (e.g., Vanguard State University) featuring 12 key landmarks: Main Library, Science Quad, Student Union, North Dorms, South Athletics, Tech Park, Engineering Hall, Arts Center, Blue Light Stations, Patrol Hubs",
+    "layers": [
+      "Illuminated Safe Corridors (Cyan & Emerald glow paths with lighting score indicators)",
+      "Hazard Overlay Pins (Lighting Outages, Temporary Construction, Active Alerts)",
+      "Blue Light Emergency Towers (Interactive 1-tap dispatch pin)",
+      "Campus Escort Patrol Live Locations (Simulated active security guards)"
+    ],
+    "interactive_features": [
+      "Click-to-set Start & Destination point with automatic pathfinding calculation",
+      "Route comparison mode: 'Max Lighting & Safety' vs 'Fastest Path' vs 'Patrol Monitored Corridor'",
+      "Live Hazard Pinning: Click on map during 'Report Hazard' mode to drop incident coordinates",
+      "Map View Mode Toggles: Night HUD (Default), Thermal Safety Heatmap, Blue Light Radar"
+    ]
+  },
+  "key_features_and_components": [
+    {
+      "name": "Navigation & Header Bar",
+      "description": "Sticky HUD topbar with brand logo, quick status indicator ('Campus Threat Level: LOW / ALL CLEAR'), navigation tabs (Map & Planner, Hazard Hub, Emergency SOS, Dashboard Analytics), and Quick SOS Button.",
+      "testid": "header-navbar"
+    },
+    {
+      "name": "Safe Route Planner & Mode Switcher",
+      "description": "Origin/Destination selector with quick presets (e.g. 'Library -> West Gate Dorms'), safety factor sliders (Lighting priority, Blue light proximity, Escort preference), and route option cards showing safety rating (e.g. 98% Safe, 450m, 6 mins walk).",
+      "testid": "safe-route-planner"
+    },
+    {
+      "name": "Interactive Campus Safety Map",
+      "description": "Custom SVG/Canvas map render engine with zoom/pan controls, path glow effects, waypoint markers, hazard warnings, blue light towers, and live route step navigation preview.",
+      "testid": "campus-map-canvas"
+    },
+    {
+      "name": "Active Escort Walk Mode (Live Companion HUD)",
+      "description": "Turn-by-turn guidance simulator with audio cue simulation, 'I Arrived Safely' check-in button, timed check-in ping, and instant emergency trigger button.",
+      "testid": "active-escort-mode-hud"
+    },
+    {
+      "name": "Hazard Reporting System",
+      "description": "Modal/Drawer form for reporting campus issues: Category (Poor Lighting, Broken Blue Light, Obstacle/Construction, Suspicious Activity), Severity Rating (Low, Medium, High), Map Location selector, Description, and photo preview attachment.",
+      "testid": "hazard-report-form"
+    },
+    {
+      "name": "Emergency SOS Trigger & Blue Light Beacon Dispatch",
+      "description": "High-visibility emergency trigger component with press-and-hold 3-second safety fuse, loud audio siren simulation toggle, direct campus police dispatch hotline simulator, and live broadcast location sender.",
+      "testid": "emergency-sos-modal"
+    },
+    {
+      "name": "Campus Safety Metrics & Analytics Dashboard",
+      "description": "Real-time command stats: Active Illuminated Path Coverage (89%), Active Campus Patrols (6 Units), 24h Resolved Hazards (14), Average Escort ETA (4 mins), plus recent incident resolution log.",
+      "testid": "safety-dashboard-metrics"
+    }
+  ],
+  "image_urls": {
+    "hero_night_path": "https://images.unsplash.com/photo-1788320232151-11394b475ade?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwzfHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwYWVyaWFsJTIwbWFwJTIwd2Fsa2luZyUyMHBhdGglMjBzdHVkZW50JTIwd2Fsa2luZyUyMG5pZ2h0JTIwc2FmZXR5fGVufDB8fHx8MTc5MTcwOTY2OHww&ixlib=rb-4.1.0&q=85",
+    "campus_aerial_overview": "https://images.unsplash.com/photo-1597216443875-9993c5a6b90e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHwyfHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwYWVyaWFsJTIwbWFwJTIwd2Fsa2luZyUyMHBhdGglMjBzdHVkZW50JTIwd2Fsa2luZyUyMG5pZ2h0JTIwc2FmZXR5fGVufDB8fHx8MTc5MTcwOTY2OHww&ixlib=rb-4.1.0&q=85",
+    "students_walking": "https://images.unsplash.com/photo-1636736548479-9124aecd1505?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODh8MHwxfHNlYXJjaHw0fHx1bml2ZXJzaXR5JTIwY2FtcHVzJTIwYWVyaWFsJTIwbWFwJTIwd2Fsa2luZyUyMHBhdGglMjBzdHVkZW50JTIwd2Fsa2luZyUyMG5pZ2h0JTIwc2FmZXR5fGVufDB8fHx8MTc5MTcwOTY2OHww&ixlib=rb-4.1.0&q=85",
+    "student_avatar_1": "https://images.unsplash.com/photo-1621274790572-7c32596bc67f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2NzN8MHwxfHNlYXJjaHwzfHx1bml2ZXJzaXR5JTIwc3R1ZGVudCUyMGNhbXB1cyUyMHBvcnRyYWl0JTIwaGVhZHNob3R8ZW58MHx8fHwxNzkxNzA5Njc1fDA&ixlib=rb-4.1.0&q=85",
+    "student_avatar_2": "https://images.unsplash.com/photo-1664843917218-71f7b6bb3afc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA2NzN8MHwxfHNlYXJjaHwyfHx1bml2ZXJzaXR5JTIwc3R1ZGVudCUyMGNhbXB1cyUyMHBvcnRyYWl0JTIwaGVhZHNob3R8ZW58MHx8fHwxNzkxNzA5Njc1fDA&ixlib=rb-4.1.0&q=85",
+    "student_avatar_3": "https://images.unsplash.com/photo-1789750956520-058b3bfe572d?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA6NzN8MHwxfHNlYXJjaHw0fHx1bml2ZXJzaXR5JTIwc3R1ZGVudCUyMGNhbXB1cyUyMHBvcnRyYWl0JTIwaGVhZHNob3R8ZW58MHx8fHwxNzkxNzA5Njc1fDA&ixlib=rb-4.1.0&q=85"
+  },
+  "micro_interactions_and_motion": {
+    "framework": "Framer Motion for React transitions & Lucide React for micro-icon animations",
+    "animations": {
+      "path_glow": "Pulse glow along SVG path elements for the active route (stroke-dasharray animation)",
+      "sos_button_pulse": "Continuous subtle amber/red halo pulse around SOS emergency trigger button",
+      "hazard_marker_bounce": "Micro scale bounce and ping animation when hovering or selecting map hazards",
+      "card_hover": "Transform lift -translate-y-1 with subtle border highlight transition (transition-all duration-200)",
+      "tab_switch": "Smooth opacity fade and horizontal slide indicator for mode switches"
+    }
+  },
+  "testing_and_accessibility_guidelines": {
+    "data_testid_policy": "All interactive elements, input fields, modals, map nodes, route cards, emergency buttons, and metric containers MUST have explicit kebab-case data-testid attributes.",
+    "required_testids": [
+      "header-navbar",
+      "nav-link-map",
+      "nav-link-hazards",
+      "nav-link-emergency",
+      "nav-link-dashboard",
+      "sos-trigger-button",
+      "origin-location-select",
+      "destination-location-select",
+      "calculate-safe-route-btn",
+      "route-option-card-0",
+      "route-option-card-1",
+      "start-navigation-btn",
+      "report-hazard-btn",
+      "hazard-category-select",
+      "hazard-severity-select",
+      "hazard-submit-btn",
+      "emergency-call-dispatch-btn",
+      "cancel-sos-btn",
+      "campus-map-svg",
+      "map-zoom-in",
+      "map-zoom-out",
+      "map-recenter-btn",
+      "safety-metrics-container"
+    ],
+    "contrast_standard": "WCAG AA compliant contrast ratio minimum 4.5:1 for standard text and 3:1 for large display titles against obsidian background.",
+    "reduced_motion": "Wrap Framer Motion transitions with prefers-reduced-motion check to preserve usability for users sensitive to motion."
+  },
+  "instructions_to_main_agent": [
+    "Use the exact layout, colors, typography, and component structure detailed in this document.",
+    "Ensure all components use appropriate data-testid attributes for automated testing.",
+    "Do not use transparent backgrounds without backdrop-blur filters for floating surfaces or sticky headers.",
+    "Implement mock data for campus locations, hazards, emergency contacts, and metrics to provide a functional and rich interactive MVP demo."
+  ]
+}
